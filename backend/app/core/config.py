@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     # Google Sheets Integration (Phase 2 reserved)
     GOOGLE_SHEETS_SPREADSHEET_ID: str = "placeholder_spreadsheet_id_abc123"
     GOOGLE_SERVICE_ACCOUNT_JSON: str = "./credentials/google-service-account.json"
+    GOOGLE_SERVICE_ACCOUNT_INFO: Optional[str] = None
     GOOGLE_SHEETS_USE_MOCK: bool = True
 
     # Meta WhatsApp Cloud API (Phase 4)

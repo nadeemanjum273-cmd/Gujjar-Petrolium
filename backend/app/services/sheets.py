@@ -346,18 +346,34 @@ class GoogleSheetsService:
             and settings.GOOGLE_SHEETS_SPREADSHEET_ID != "placeholder_spreadsheet_id_abc123"
         )
 
-        if not use_mock and creds_file and has_valid_sheet_id:
-            try:
-                import gspread
-                self._client = gspread.service_account(filename=creds_file)
-                self._spreadsheet = self._client.open_by_key(settings.GOOGLE_SHEETS_SPREADSHEET_ID)
-                self._is_mock = False
-                logger.info(f"Connected to live Google Spreadsheet: '{self._spreadsheet.title}' (ID: {settings.GOOGLE_SHEETS_SPREADSHEET_ID[:8]}***)")
-                return
-            except Exception as e:
-                logger.warning(
-                    f"Failed to connect to live Google Sheets ({type(e).__name__}: {str(e)}). Falling back to mock."
-                )
+        if not use_mock and has_valid_sheet_id:
+            # Check if JSON content is provided via env var (ideal for Vercel/cloud)
+            if settings.GOOGLE_SERVICE_ACCOUNT_INFO:
+                try:
+                    import gspread
+                    info = json.loads(settings.GOOGLE_SERVICE_ACCOUNT_INFO)
+                    self._client = gspread.service_account_from_dict(info)
+                    self._spreadsheet = self._client.open_by_key(settings.GOOGLE_SHEETS_SPREADSHEET_ID)
+                    self._is_mock = False
+                    logger.info(f"Connected to live Google Spreadsheet via service account info: '{self._spreadsheet.title}' (ID: {settings.GOOGLE_SHEETS_SPREADSHEET_ID[:8]}***)")
+                    return
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to connect using GOOGLE_SERVICE_ACCOUNT_INFO ({type(e).__name__}: {str(e)}). Falling back."
+                    )
+            # Check if JSON file exists on filesystem
+            elif creds_file:
+                try:
+                    import gspread
+                    self._client = gspread.service_account(filename=creds_file)
+                    self._spreadsheet = self._client.open_by_key(settings.GOOGLE_SHEETS_SPREADSHEET_ID)
+                    self._is_mock = False
+                    logger.info(f"Connected to live Google Spreadsheet: '{self._spreadsheet.title}' (ID: {settings.GOOGLE_SHEETS_SPREADSHEET_ID[:8]}***)")
+                    return
+                except Exception as e:
+                    logger.warning(
+                        f"Failed to connect to live Google Sheets ({type(e).__name__}: {str(e)}). Falling back to mock."
+                    )
 
         self._spreadsheet = MockSpreadsheet()
         self._is_mock = True
