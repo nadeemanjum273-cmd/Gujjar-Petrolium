@@ -107,9 +107,17 @@ async def generic_exception_handler(request: Request, exc: Exception):
     )
 
 
+from fastapi.responses import JSONResponse, RedirectResponse
+
 # ------------------------------------------------------------------------------
-# Direct Root Health Endpoint
+# Direct Root Endpoints
 # ------------------------------------------------------------------------------
+@app.get("/", include_in_schema=False)
+def root_index():
+    """Redirect root path to interactive API documentation."""
+    return RedirectResponse(url="/docs")
+
+
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 def root_health():
     """Root health check for load balancers and container probes."""

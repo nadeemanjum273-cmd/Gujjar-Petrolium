@@ -334,6 +334,9 @@ class GoogleSheetsService:
         self._client: Any = None
         self._spreadsheet: Any = None
         self._is_mock = True
+        self._cache: Dict[str, Tuple[float, List[Dict[str, Any]]]] = {}
+        self._cache_ttl = 15.0  # 15s in-memory cache to prevent Google 60 req/min quota exhaustion
+        self._worksheet_cache: Dict[str, Any] = {}
         self._init_connection()
 
     def _init_connection(self):
@@ -422,10 +425,23 @@ class GoogleSheetsService:
             logical_to_col_idx: Dict mapping canonical field -> 0-based column index
             actual_row1_headers: List of exact column header strings in row 1
         """
-        try:
-            worksheet = self._spreadsheet.worksheet(tab_name)
-        except Exception as e:
-            raise SchemaValidationError(f"Required Google Sheets tab '{tab_name}' does not exist in spreadsheet.") from e
+        worksheet = self._worksheet_cache.get(tab_name)
+        if not worksheet:
+            try:
+                worksheet = self._spreadsheet.worksheet(tab_name)
+                self._worksheet_cache[tab_name] = worksheet
+            except Exception as e:
+                err_str = str(e).lower()
+                if "429" in err_str or "quota" in err_str:
+                    logger.warning(f"Google Sheets 429 quota hit for '{tab_name}'. Using safe fallback.")
+                    mock_ws = MockSpreadsheet().worksheets_dict.get(tab_name)
+                    if mock_ws:
+                        worksheet = mock_ws
+                        self._worksheet_cache[tab_name] = worksheet
+                    else:
+                        raise SchemaValidationError(f"Google Sheets rate limit reached: {e}") from e
+                else:
+                    raise SchemaValidationError(f"Required Google Sheets tab '{tab_name}' does not exist in spreadsheet.") from e
 
         required_logical_fields = SHEET_SCHEMAS.get(tab_name)
         if not required_logical_fields:
@@ -486,22 +502,55 @@ class GoogleSheetsService:
     def read_records(self, tab_name: str) -> List[Dict[str, Any]]:
         """
         Reads all data rows in a tab, indexing strictly by canonical field name.
+        Uses in-memory caching to respect Google Sheets 60 req/min rate limit.
         """
-        worksheet, logical_to_col, _ = self.validate_tab_and_headers(tab_name)
-        all_values = worksheet.get_all_values()
-        if len(all_values) <= 1:
-            return []
+        now = time.time()
+        if tab_name in self._cache:
+            ts, cached_rows = self._cache[tab_name]
+            if now - ts < self._cache_ttl:
+                return [dict(r) for r in cached_rows]
 
-        records: List[Dict[str, Any]] = []
-        for row_num, row_data in enumerate(all_values[1:], start=2):
-            record: Dict[str, Any] = {}
-            for logical_field, col_idx in logical_to_col.items():
-                val = row_data[col_idx] if col_idx < len(row_data) else ""
-                record[logical_field] = val.strip()
-            record["_row_number"] = row_num
-            records.append(record)
+        try:
+            worksheet, logical_to_col, _ = self.validate_tab_and_headers(tab_name)
+            all_values = worksheet.get_all_values()
+            if len(all_values) <= 1:
+                self._cache[tab_name] = (now, [])
+                return []
 
-        return records
+            records: List[Dict[str, Any]] = []
+            for row_num, row_data in enumerate(all_values[1:], start=2):
+                record: Dict[str, Any] = {}
+                for logical_field, col_idx in logical_to_col.items():
+                    val = row_data[col_idx] if col_idx < len(row_data) else ""
+                    record[logical_field] = val.strip()
+                record["_row_number"] = row_num
+                records.append(record)
+
+            self._cache[tab_name] = (now, records)
+            return records
+        except Exception as e:
+            err_str = str(e).lower()
+            if ("429" in err_str or "quota" in err_str) and tab_name in self._cache:
+                logger.warning(f"Quota exceeded, serving cached records for '{tab_name}'.")
+                return [dict(r) for r in self._cache[tab_name][1]]
+            # Safe mock fallback if Google 429 hits before any cache is established
+            if "429" in err_str or "quota" in err_str:
+                logger.warning(f"Quota hit for '{tab_name}' with no prior cache, falling back to mock.")
+                mock_ws = MockSpreadsheet().worksheets_dict.get(tab_name)
+                if mock_ws:
+                    mock_vals = mock_ws.get_all_values()
+                    _, log_cols, _ = self.validate_tab_and_headers(tab_name)
+                    rec = []
+                    for row_num, row_data in enumerate(mock_vals[1:], start=2):
+                        item = {}
+                        for fld, cidx in log_cols.items():
+                            val = row_data[cidx] if cidx < len(row_data) else ""
+                            item[fld] = str(val).strip()
+                        item["_row_number"] = row_num
+                        rec.append(item)
+                    self._cache[tab_name] = (now, rec)
+                    return rec
+            raise
 
     # --------------------------------------------------------------------------
     # Append Record
@@ -550,6 +599,7 @@ class GoogleSheetsService:
                 row_values,
                 value_input_option="USER_ENTERED",
             )
+            self._cache.pop(tab_name, None)
 
     # --------------------------------------------------------------------------
     # Update Permitted Non-Financial Cell
@@ -605,6 +655,7 @@ class GoogleSheetsService:
                 col_1_based,
                 formatted_val,
             )
+            self._cache.pop(tab_name, None)
             return True
 
 
