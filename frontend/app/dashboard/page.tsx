@@ -68,37 +68,37 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="space-y-7">
+      <div className="space-y-5 sm:space-y-7">
         {/* Page Top Title Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200/80 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 border-b border-slate-200/80 pb-3 sm:pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 tracking-tight">
                 {t('navDashboard')}
               </h1>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-100 text-blue-800 border border-blue-200">
                 LIVE
               </span>
             </div>
-            <p className="text-xs lg:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5 sm:mt-1">
               {isUrdu
                 ? 'کھاتہ اور مالیاتی خلاصہ'
                 : 'Fuel & Ledger Management System'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <button
               onClick={loadDashboardData}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 pop-out-btn shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-50 pop-out-btn shadow-xs transition-all cursor-pointer flex-1 sm:flex-initial justify-center"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-teal-600' : ''}`} />
               <span>{t('refresh')}</span>
             </button>
             <Link
               href="/transactions/new"
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm pop-out-btn transition-all"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm pop-out-btn transition-all flex-1 sm:flex-initial justify-center"
             >
               <PlusCircle className="w-3.5 h-3.5" />
               <span>{t('navNewTransaction')}</span>
@@ -127,8 +127,11 @@ export default function DashboardPage() {
           <div className="pop-out-card bg-white rounded-2xl p-4 sm:p-5 border border-rose-200/80 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-xs font-semibold text-slate-500">{t('totalReceivables')}</span>
-              <div className="text-2xl font-black text-rose-600 font-mono tracking-tight">
-                {formatPKR(summary?.total_receivables || 0, { showUrduSuffix: isUrdu })}
+              <div className="text-xl sm:text-2xl font-black text-rose-600 font-mono tracking-tight flex items-baseline gap-1.5">
+                <span className="ltr-text font-bold">
+                  {formatPKR(summary?.total_receivables || 0, { showUrduSuffix: false, showSymbol: false })}
+                </span>
+                <span className="text-xs font-bold text-rose-600">{isUrdu ? 'روپے' : 'PKR'}</span>
               </div>
               <p className="text-[11px] text-slate-400">
                 {isUrdu ? 'تمام کسٹمرز کے واجب الادا بقایا جات' : 'Total credit balance outstanding'}
@@ -139,48 +142,55 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="pop-out-card bg-white rounded-2xl p-5 border border-emerald-200/80 shadow-sm flex items-center justify-between">
+          <div className="pop-out-card bg-white rounded-2xl p-4 sm:p-5 border border-emerald-200/80 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-xs font-semibold text-slate-500">{t('todayRecovery')}</span>
-              <div className="text-2xl font-black text-emerald-600 font-mono tracking-tight">
-                {formatPKR(25000, { showUrduSuffix: isUrdu })}
+              <div className="text-xl sm:text-2xl font-black text-emerald-600 font-mono tracking-tight flex items-baseline gap-1.5">
+                <span className="ltr-text font-bold">
+                  {formatPKR(25000, { showUrduSuffix: false, showSymbol: false })}
+                </span>
+                <span className="text-xs font-bold text-emerald-600">{isUrdu ? 'روپے' : 'PKR'}</span>
               </div>
               <p className="text-[11px] text-slate-400">
                 {isUrdu ? 'کیش کاؤنٹر و آن لائن بینک ٹرانسفر' : 'Counter cash & online deposits'}
               </p>
             </div>
-            <div className="p-3 rounded-2xl bg-emerald-50 text-emerald-600">
-              <ArrowDownLeft className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-emerald-50 text-emerald-600 flex-shrink-0">
+              <ArrowDownLeft className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="pop-out-card bg-white rounded-2xl p-5 border border-amber-200/80 shadow-sm flex items-center justify-between">
+          <div className="pop-out-card bg-white rounded-2xl p-4 sm:p-5 border border-amber-200/80 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-xs font-semibold text-slate-500">{t('totalOverdue')}</span>
-              <div className="text-2xl font-black text-amber-600 font-mono tracking-tight">
-                {summary?.total_overdue_customers || 3}
+              <div className="text-xl sm:text-2xl font-black text-amber-600 font-mono tracking-tight flex items-baseline gap-1.5">
+                <span className="ltr-text font-bold">{summary?.total_overdue_customers || 3}</span>
+                <span className="text-xs font-bold text-amber-600">{isUrdu ? 'کھاتے' : 'Accounts'}</span>
               </div>
               <p className="text-[11px] text-slate-400">
                 {isUrdu ? '15 دن کی مقررہ میعاد سے زائد' : 'Accounts older than 15 days'}
               </p>
             </div>
-            <div className="p-3 rounded-2xl bg-amber-50 text-amber-600">
-              <AlertTriangle className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-amber-50 text-amber-600 flex-shrink-0">
+              <AlertTriangle className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="pop-out-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center justify-between">
+          <div className="pop-out-card bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-xs font-semibold text-slate-500">{t('pendingReceipts')}</span>
-              <div className="text-2xl font-black text-slate-800 font-mono tracking-tight">
-                {formatPKR(summary?.total_pending_receipts_amount || 0, { showUrduSuffix: isUrdu })}
+              <div className="text-xl sm:text-2xl font-black text-slate-800 font-mono tracking-tight flex items-baseline gap-1.5">
+                <span className="ltr-text font-bold">
+                  {formatPKR(summary?.total_pending_receipts_amount || 0, { showUrduSuffix: false, showSymbol: false })}
+                </span>
+                <span className="text-xs font-bold text-slate-700">{isUrdu ? 'روپے' : 'PKR'}</span>
               </div>
               <p className="text-[11px] text-slate-400">
                 {isUrdu ? 'آن لائن سلپس زیرِ تصدیق' : 'Bank slips awaiting verification'}
               </p>
             </div>
-            <div className="p-3 rounded-2xl bg-slate-100 text-slate-700">
-              <Receipt className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-100 text-slate-700 flex-shrink-0">
+              <Receipt className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
         </section>
