@@ -112,7 +112,7 @@ export function CrystalLiveTicker() {
       icon: <Clock className="w-3.5 h-3.5 text-cyan-300 crystal-dancing-icon" />,
       title: isUrdu ? 'کراچی معیاری وقت' : 'Karachi Time (PST)',
       value: timeStr || '09:40 AM',
-      status: 'GMT+5',
+      status: 'PST',
       statusColor: 'text-cyan-300',
     },
   ];

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   Menu,
-  PlusCircle,
   Fuel,
   User,
   Clock,
@@ -38,11 +37,12 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false,
+        hour12: true,
         timeZone: 'Asia/Karachi',
       };
+      // Clean formatted date and time without GMT/timezone suffix
       const formatted = new Intl.DateTimeFormat(isUrdu ? 'ur-PK' : 'en-US', dateOptions).format(now);
-      setCurrentTime(`${formatted} GMT+0500 (Pakistan Standard Time)`);
+      setCurrentTime(formatted);
     };
 
     updateClock();
@@ -63,7 +63,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
 
   return (
     <header className="h-16 bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 md:px-6 flex items-center justify-between shadow-xs select-none">
-      {/* Mobile Toggle & Brand Identity */}
+      {/* Left: Mobile Menu Toggle only (Brand is already in Sidebar) */}
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -74,37 +74,30 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Brand Logo & Name: Pure Gujjar Petrolium */}
-        <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-            <Fuel className="w-4.5 h-4.5" />
+        {/* Mobile-only brand badge (hidden on desktop to avoid duplicate) */}
+        <div className="flex items-center gap-2 md:hidden">
+          <div className="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center">
+            <Fuel className="w-4 h-4" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-base text-slate-900 tracking-tight leading-tight">
-                {isUrdu ? BUSINESS_IDENTITY.nameUr : BUSINESS_IDENTITY.name}
-              </span>
-            </div>
-            <p className="text-[10px] text-slate-500 leading-none hidden sm:block mt-0.5">
-              {isUrdu ? BUSINESS_IDENTITY.subtitleUr : 'Kot Gujjran Fuel & Ledger Management System'}
-            </p>
-          </div>
-        </Link>
+          <span className="font-bold text-sm text-slate-900 truncate">
+            {isUrdu ? BUSINESS_IDENTITY.nameUr : BUSINESS_IDENTITY.name}
+          </span>
+        </div>
       </div>
 
-      {/* Center Live Date & Time */}
-      <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-50 border border-slate-200/60 text-xs text-slate-600 font-mono">
+      {/* Center: Clean Live Date & Time (without GMT or Pakistan Standard Time suffix) */}
+      <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200/70 text-xs text-slate-700 font-mono">
         <Clock className="w-3.5 h-3.5 text-teal-600 animate-pulse" />
-        <span className="ltr-text font-medium">{currentTime || 'Loading Live Clock...'}</span>
+        <span className="ltr-text font-semibold">{currentTime || '...'}</span>
       </div>
 
-      {/* Right Controls: Language Selector, Quick Actions, Profile */}
+      {/* Right Controls: Clean Language Selector & User Profile */}
       <div className="flex items-center gap-3">
         {/* Language Selector Dropdown */}
         <div className="relative">
           <button
             onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 transition-all pop-out-btn shadow-xs"
+            className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 transition-all pop-out-btn shadow-xs cursor-pointer"
           >
             <Globe className="w-3.5 h-3.5 text-teal-600" />
             <span>{lang === 'ur' ? 'اردو (Urdu)' : 'English (US)'}</span>
@@ -122,7 +115,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
               </div>
               <button
                 onClick={() => changeLanguage('ur')}
-                className={`w-full text-right px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors ${
+                className={`w-full text-right px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer ${
                   lang === 'ur' ? 'text-teal-700 font-bold bg-teal-50/50' : 'text-slate-700'
                 }`}
               >
@@ -131,7 +124,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
               </button>
               <button
                 onClick={() => changeLanguage('en')}
-                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors ${
+                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer ${
                   lang === 'en' ? 'text-teal-700 font-bold bg-teal-50/50' : 'text-slate-700'
                 }`}
               >
@@ -142,16 +135,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           )}
         </div>
 
-        {/* Quick New Transaction Button */}
-        <Link
-          href="/transactions/new"
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm pop-out-btn transition-all"
-        >
-          <PlusCircle className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">{t('navNewTransaction')}</span>
-        </Link>
-
-        {/* Manager Profile */}
+        {/* User Profile */}
         {user ? (
           <div className="flex items-center gap-2 pr-2 border-r border-slate-200">
             <div className="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-700 shadow-inner">
@@ -164,7 +148,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
             <button
               onClick={handleLogout}
               title={t('logout')}
-              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors pop-out-btn"
+              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors pop-out-btn cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
             </button>
