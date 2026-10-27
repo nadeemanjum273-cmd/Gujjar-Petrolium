@@ -64,16 +64,16 @@ export function StatCard({
 
   return (
     <div
-      className={`rounded-2xl p-5 border transition-all duration-200 hover:shadow-md ${toneClasses.card}`}
+      className={`rounded-2xl p-5 border pop-out-card cursor-pointer ${toneClasses.card}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-500 font-urdu">{title}</span>
-          <div className={`text-2xl lg:text-3xl font-extrabold tracking-tight ${toneClasses.value}`}>
+          <span className="text-xs font-semibold text-slate-500">{title}</span>
+          <div className={`text-2xl lg:text-3xl font-extrabold tracking-tight font-mono ${toneClasses.value}`}>
             {displayVal}
           </div>
           {subtitle && (
-            <p className="text-xs text-slate-500 font-urdu pt-0.5">{subtitle}</p>
+            <p className="text-xs text-slate-500 pt-0.5">{subtitle}</p>
           )}
         </div>
         {icon && (

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { CrystalLiveTicker } from './CrystalLiveTicker';
 import {
   LayoutDashboard,
   Users,
@@ -16,26 +17,32 @@ import {
   ShieldCheck,
   X,
   Fuel,
+  Truck,
+  Layers,
 } from 'lucide-react';
 import { BUSINESS_IDENTITY } from '@/lib/constants';
-
-const MOBILE_NAV_ITEMS = [
-  { label: 'ڈیش بورڈ', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'گاہک / کسٹمرز', href: '/customers', icon: Users },
-  { label: 'نیا لین دین', href: '/transactions/new', icon: PlusCircle },
-  { label: 'واجبات کی رپورٹ', href: '/reports/overdue', icon: FileText },
-  { label: 'واٹس ایپ ریمائنڈرز', href: '/reminders', icon: MessageSquare },
-  { label: 'ادائیگی کی رسیدیں', href: '/receipts', icon: Receipt },
-  { label: 'سیٹنگز', href: '/settings', icon: Settings },
-  { label: 'آڈٹ لاگ', href: '/audit', icon: ShieldCheck },
-];
+import { useLanguage } from '@/lib/LanguageContext';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { isUrdu, t, dir } = useLanguage();
+
+  const mobileNavItems = [
+    { label: t('navDashboard'), href: '/dashboard', icon: LayoutDashboard },
+    { label: t('navCustomer'), href: '/customers', icon: Users },
+    { label: t('navSupplier'), href: '/reports', icon: Truck },
+    { label: t('navFuels'), href: '/settings', icon: Fuel },
+    { label: t('navInvoices'), href: '/receipts', icon: Receipt },
+    { label: t('navNewTransaction'), href: '/transactions/new', icon: PlusCircle },
+    { label: t('navReports'), href: '/reports/overdue', icon: FileText },
+    { label: t('navReminders'), href: '/reminders', icon: MessageSquare },
+    { label: t('navSettings'), href: '/settings', icon: Settings },
+    { label: t('navAudit'), href: '/audit', icon: ShieldCheck },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased text-slate-900 font-urdu">
+    <div className={`min-h-screen bg-slate-50 flex flex-col md:flex-row antialiased text-slate-900 ${isUrdu ? 'font-urdu' : 'font-sans'}`}>
       {/* Desktop Persistent Sidebar */}
       <div className="hidden md:block flex-shrink-0">
         <Sidebar />
@@ -51,8 +58,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Mobile Slide-over Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 w-72 bg-navy-950 text-white z-50 md:hidden flex flex-col transition-transform duration-200 ease-in-out border-l border-navy-800 ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed inset-y-0 ${
+          isUrdu ? 'right-0 border-l' : 'left-0 border-r'
+        } w-72 bg-navy-950 text-white z-50 md:hidden flex flex-col transition-transform duration-200 ease-in-out border-navy-800 ${
+          mobileMenuOpen
+            ? 'translate-x-0'
+            : isUrdu
+            ? 'translate-x-full'
+            : '-translate-x-full'
         }`}
       >
         <div className="p-4 border-b border-navy-850 flex items-center justify-between">
@@ -60,7 +73,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center">
               <Fuel className="w-4 h-4" />
             </div>
-            <span className="font-bold text-sm truncate font-urdu">{BUSINESS_IDENTITY.nameUr}</span>
+            <span className="font-bold text-sm truncate">
+              {isUrdu ? BUSINESS_IDENTITY.nameUr : 'FuelFlow Lite'}
+            </span>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
@@ -71,40 +86,45 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-          {MOBILE_NAV_ITEMS.map((item) => {
+          {mobileNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+            const isActive =
+              pathname === item.href ||
+              (item.href !== '/dashboard' && pathname.startsWith(item.href));
 
             return (
               <Link
-                key={item.href}
+                key={item.label}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-urdu font-medium transition-colors ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                   isActive
-                    ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
+                    ? 'bg-blue-600 text-white font-bold'
                     : 'text-slate-300 hover:bg-navy-900 hover:text-white'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-teal-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-navy-850 text-xs text-slate-400 text-center font-urdu">
-          مجاز منیجر: {BUSINESS_IDENTITY.manager}
+        <div className="p-4 border-t border-navy-850 text-xs text-slate-400 text-center">
+          {t('managerTitle')}: {BUSINESS_IDENTITY.manager}
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 pb-16">
         <Header onMenuToggle={() => setMobileMenuOpen(true)} />
-        <main className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto space-y-6">
+        <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
           {children}
         </main>
       </div>
+
+      {/* Crystal HD Dancing Live Ticker (Pinned at Bottom) */}
+      <CrystalLiveTicker />
     </div>
   );
 }
