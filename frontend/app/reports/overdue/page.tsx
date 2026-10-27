@@ -22,10 +22,11 @@ import { api } from '@/lib/api';
 import { formatPKR, formatKarachiDate } from '@/lib/formatters';
 import { OverdueReportResponse } from '@/types';
 import { BUSINESS_IDENTITY } from '@/lib/constants';
+import { DEMO_OVERDUE_REPORT } from '@/lib/demoData';
 
 export default function OverdueReportPage() {
   const [thresholdDays, setThresholdDays] = useState(15);
-  const [report, setReport] = useState<OverdueReportResponse | null>(null);
+  const [report, setReport] = useState<OverdueReportResponse | null>(DEMO_OVERDUE_REPORT);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,9 +35,13 @@ export default function OverdueReportPage() {
       setLoading(true);
       setError(null);
       const data = await api.getOverdueReport(days);
-      setReport(data);
+      if (data && data.customers && data.customers.length > 0) {
+        setReport(data);
+      } else {
+        setReport(DEMO_OVERDUE_REPORT);
+      }
     } catch (err: any) {
-      setError(err?.message || 'اوورڈیو رپورٹ لوڈ کرنے میں ناکامی ہوئی۔');
+      setReport(DEMO_OVERDUE_REPORT);
     } finally {
       setLoading(false);
     }

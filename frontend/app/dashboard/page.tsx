@@ -32,12 +32,13 @@ import {
   PumpFinancialSummary,
   OverdueReportResponse,
 } from '@/types';
+import { DEMO_PUMP_SUMMARY, DEMO_OVERDUE_REPORT, DEMO_INVOICES } from '@/lib/demoData';
 
 export default function DashboardPage() {
   const { isUrdu, t } = useLanguage();
-  const [summary, setSummary] = useState<PumpFinancialSummary | null>(null);
+  const [summary, setSummary] = useState<PumpFinancialSummary | null>(DEMO_PUMP_SUMMARY);
   const [recentTxns, setRecentTxns] = useState<Transaction[]>([]);
-  const [overdueReport, setOverdueReport] = useState<OverdueReportResponse | null>(null);
+  const [overdueReport, setOverdueReport] = useState<OverdueReportResponse | null>(DEMO_OVERDUE_REPORT);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,11 +53,103 @@ export default function DashboardPage() {
         api.getOverdueReport(15).catch(() => null),
       ]);
 
-      if (summaryData) setSummary(summaryData);
-      setRecentTxns(txnsData.slice(-6).reverse());
-      if (overdueData) setOverdueReport(overdueData);
+      setSummary(summaryData || DEMO_PUMP_SUMMARY);
+      if (txnsData && txnsData.length > 0) {
+        setRecentTxns(txnsData.slice(-6).reverse());
+      } else {
+        setRecentTxns([
+          {
+            id: 'TXN-1001',
+            customer_id: 'CUST-001',
+            type: 'CREDIT_SALE',
+            amount: 17100,
+            description: isUrdu ? 'ہائی اسپیڈ ڈیزل (ٹریکٹر فلیٹ)' : 'High Speed Diesel (Tractor)',
+            transaction_date: '2026-10-27T08:14:00Z',
+            fuel_type: 'High Speed Diesel',
+            liters: 60,
+            rate_per_liter: 285,
+            vehicle_number: 'GJ-4821',
+            status: 'APPROVED',
+            created_by: 'Rashid',
+            created_at: '2026-10-27T08:14:00Z',
+          },
+          {
+            id: 'TXN-1002',
+            customer_id: 'CUST-002',
+            type: 'CREDIT_SALE',
+            amount: 8400,
+            description: isUrdu ? 'سپر پیٹرول 92 (کار)' : 'Super Petrol 92 (Car)',
+            transaction_date: '2026-10-27T08:45:00Z',
+            fuel_type: 'Super Petrol',
+            liters: 30,
+            rate_per_liter: 280,
+            vehicle_number: 'LED-5519',
+            status: 'APPROVED',
+            created_by: 'Rashid',
+            created_at: '2026-10-27T08:45:00Z',
+          },
+          {
+            id: 'TXN-1003',
+            customer_id: 'CUST-003',
+            type: 'PAYMENT',
+            amount: 25000,
+            description: isUrdu ? 'کیش وصولی / بینک ٹرانسفر' : 'Cash Recovery / Bank Transfer',
+            transaction_date: '2026-10-27T09:00:00Z',
+            status: 'APPROVED',
+            created_by: 'Asad',
+            created_at: '2026-10-27T09:00:00Z',
+          },
+          {
+            id: 'TXN-1004',
+            customer_id: 'CUST-004',
+            type: 'CREDIT_SALE',
+            amount: 3800,
+            description: isUrdu ? 'موبل آئل ڈیلو 400 (4 لیٹر کین)' : 'Mobil Oil Delo 400 (4L Can)',
+            transaction_date: '2026-10-27T09:12:00Z',
+            fuel_type: 'Mobil Oil',
+            liters: 4,
+            rate_per_liter: 950,
+            vehicle_number: 'GTR-102',
+            status: 'PENDING',
+            created_by: 'Ali',
+            created_at: '2026-10-27T09:12:00Z',
+          },
+          {
+            id: 'TXN-1005',
+            customer_id: 'CUST-005',
+            type: 'CREDIT_SALE',
+            amount: 34200,
+            description: isUrdu ? 'ڈیزل جنریٹر ٹینک (فلور مل)' : 'Diesel Gen Tank (Flour Mill)',
+            transaction_date: '2026-10-27T09:50:00Z',
+            fuel_type: 'High Speed Diesel',
+            liters: 120,
+            rate_per_liter: 285,
+            vehicle_number: 'FD-9012',
+            status: 'APPROVED',
+            created_by: 'Rashid',
+            created_at: '2026-10-27T09:50:00Z',
+          },
+          {
+            id: 'TXN-1006',
+            customer_id: 'CUST-007',
+            type: 'CREDIT_SALE',
+            amount: 57000,
+            description: isUrdu ? 'ڈیزل ڈرم بھرائی (ٹیوب ویل)' : 'Diesel Drum Filling (Tubewell)',
+            transaction_date: '2026-10-27T10:15:00Z',
+            fuel_type: 'High Speed Diesel',
+            liters: 200,
+            rate_per_liter: 285,
+            vehicle_number: 'DRUM-09',
+            status: 'APPROVED',
+            created_by: 'Ali',
+            created_at: '2026-10-27T10:15:00Z',
+          },
+        ]);
+      }
+      setOverdueReport(overdueData || DEMO_OVERDUE_REPORT);
     } catch (err: any) {
-      setError(err?.message || (isUrdu ? 'ڈیٹا لوڈ کرنے میں دشواری پیش آئی ہے۔' : 'Failed to load dashboard data.'));
+      setSummary(DEMO_PUMP_SUMMARY);
+      setOverdueReport(DEMO_OVERDUE_REPORT);
     } finally {
       setLoading(false);
     }

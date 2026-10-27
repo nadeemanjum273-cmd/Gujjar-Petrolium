@@ -40,7 +40,7 @@ export function MetricStatCards({
       bgGradient: 'bg-gradient-to-br from-[#0284c7] to-[#0369a1]',
       popOutClass: 'pop-out-blue',
       glow: 'shadow-sky-500/20',
-      href: '/reports',
+      href: '/suppliers',
       badge: isUrdu ? 'PSO, Shell, Attock' : 'PSO, Shell, Attock',
     },
     {
@@ -51,7 +51,7 @@ export function MetricStatCards({
       bgGradient: 'bg-gradient-to-br from-[#f43f5e] to-[#be123c]',
       popOutClass: 'pop-out-rose',
       glow: 'shadow-rose-500/20',
-      href: '/receipts',
+      href: '/invoices',
       badge: isUrdu ? 'آج جاری شدہ' : 'Today Generated',
     },
     {

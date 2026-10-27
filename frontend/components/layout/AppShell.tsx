@@ -31,9 +31,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const mobileNavItems = [
     { label: t('navDashboard'), href: '/dashboard', icon: LayoutDashboard },
     { label: t('navCustomer'), href: '/customers', icon: Users },
-    { label: t('navSupplier'), href: '/reports', icon: Truck },
+    { label: t('navSupplier'), href: '/suppliers', icon: Truck },
     { label: t('navFuels'), href: '/settings', icon: Fuel },
-    { label: t('navInvoices'), href: '/receipts', icon: Receipt },
+    { label: t('navInvoices'), href: '/invoices', icon: Receipt },
     { label: t('navNewTransaction'), href: '/transactions/new', icon: PlusCircle },
     { label: t('navReports'), href: '/reports/overdue', icon: FileText },
     { label: t('navReminders'), href: '/reminders', icon: MessageSquare },

@@ -47,14 +47,14 @@ export function Sidebar() {
     },
     {
       label: t('navInvoices'),
-      href: '/receipts',
+      href: '/invoices',
       icon: FileText,
       badge: null,
       hasSub: false,
     },
     {
       label: t('navSupplier'),
-      href: '/reports',
+      href: '/suppliers',
       icon: Truck,
       badge: null,
       hasSub: true,

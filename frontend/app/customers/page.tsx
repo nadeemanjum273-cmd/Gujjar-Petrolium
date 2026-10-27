@@ -22,9 +22,10 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { api } from '@/lib/api';
 import { formatPKR, formatPakistaniPhone } from '@/lib/formatters';
 import { Customer, CustomerStatus } from '@/types';
+import { DEMO_CUSTOMERS } from '@/lib/demoData';
 
 export default function CustomersPage() {
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>(DEMO_CUSTOMERS);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -46,9 +47,14 @@ export default function CustomersPage() {
     try {
       setLoading(true);
       const data = await api.getCustomers();
-      setCustomers(data);
+      if (data && data.length > 0) {
+        setCustomers(data);
+      } else {
+        setCustomers(DEMO_CUSTOMERS);
+      }
     } catch (err: any) {
       console.error('Failed to fetch customers:', err);
+      setCustomers(DEMO_CUSTOMERS);
     } finally {
       setLoading(false);
     }

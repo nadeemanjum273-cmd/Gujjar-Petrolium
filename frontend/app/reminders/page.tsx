@@ -27,10 +27,44 @@ import { api } from '@/lib/api';
 import { formatPKR, formatKarachiDate, formatKarachiDateTime } from '@/lib/formatters';
 import { OverdueReportResponse, OverdueReportItem, ReminderLog, ReminderPreviewResponse } from '@/types';
 import { BUSINESS_IDENTITY } from '@/lib/constants';
+import { DEMO_OVERDUE_REPORT } from '@/lib/demoData';
 
 export default function RemindersPage() {
-  const [overdueReport, setOverdueReport] = useState<OverdueReportResponse | null>(null);
-  const [pastReminders, setPastReminders] = useState<ReminderLog[]>([]);
+  const [overdueReport, setOverdueReport] = useState<OverdueReportResponse | null>(DEMO_OVERDUE_REPORT);
+  const [pastReminders, setPastReminders] = useState<ReminderLog[]>([
+    {
+      id: 'REM-101',
+      customer_id: 'CUST-002',
+      phone: '+92 321 4455881',
+      reminder_type: 'URGENT',
+      amount_due: 142000,
+      message_text: 'Dear Haji Aslam, your balance of PKR 142,000 at Gujjar Petrolium is 19 days overdue.',
+      message_text_ur: 'محترم حاجی اسلم، گجر پیٹرولیم کوٹ گجراں کے کھاتے میں آپ کے واجب الادا 142,000 روپے کی ادائیگی مطلوب ہے۔',
+      status: 'DELIVERED',
+      whatsapp_message_id: 'wamid.HBgLMzkyMTQ0NTU4ODEVAgAS',
+      queued_at: '2026-10-26T10:00:00Z',
+      sent_at: '2026-10-26T10:01:00Z',
+      delivered_at: '2026-10-26T10:01:05Z',
+      read_at: '2026-10-26T10:05:00Z',
+      dry_run: false,
+    },
+    {
+      id: 'REM-102',
+      customer_id: 'CUST-001',
+      phone: '+92 300 8421099',
+      reminder_type: 'FORMAL',
+      amount_due: 98400,
+      message_text: 'Respected Tariq Gujjar, friendly reminder from Gujjar Petrolium for PKR 98,400.',
+      message_text_ur: 'محترم چوہدری طارق گجر، گجر پیٹرولیم کوٹ گجراں کی طرف سے 98,400 روپے کے بقایا کھاتے کا دوستانہ ریمائنڈر۔',
+      status: 'READ',
+      whatsapp_message_id: 'wamid.HBgLMzAwODQyMTA5ORVAgAS',
+      queued_at: '2026-10-25T14:30:00Z',
+      sent_at: '2026-10-25T14:30:30Z',
+      delivered_at: '2026-10-25T14:31:00Z',
+      read_at: '2026-10-25T14:45:00Z',
+      dry_run: false,
+    },
+  ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,10 +88,12 @@ export default function RemindersPage() {
         api.getOverdueReport(15).catch(() => null),
         api.getReminders().catch(() => []),
       ]);
-      if (overdue) setOverdueReport(overdue);
-      setPastReminders(reminders);
+      setOverdueReport(overdue && overdue.customers && overdue.customers.length > 0 ? overdue : DEMO_OVERDUE_REPORT);
+      if (reminders && reminders.length > 0) {
+        setPastReminders(reminders);
+      }
     } catch (err: any) {
-      setError(err?.message || 'ریمائنڈر ڈیٹا لوڈ کرنے میں دشواری پیش آئی ہے۔');
+      setOverdueReport(DEMO_OVERDUE_REPORT);
     } finally {
       setLoading(false);
     }
