@@ -101,7 +101,7 @@ export function TodayBillingTable({ transactions = [] }: TodayBillingTableProps)
             {t('todaysBillingTable')}
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            {isUrdu ? 'گجر پیٹرولیم کوٹ گجراں کے بل اور کھاتہ اندراجات' : 'Gujjar Petrolium Kot Gujjran — Invoices & Ledger Entries'}
+            {isUrdu ? 'آج کے بل اور کھاتہ اندراجات' : 'Today’s Invoices & Ledger Entries'}
           </p>
         </div>
         <Link

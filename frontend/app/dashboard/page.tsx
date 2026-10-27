@@ -82,8 +82,8 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs lg:text-sm text-slate-500 mt-1">
               {isUrdu
-                ? 'گجر پیٹرولیم کوٹ گجراں — کھاتہ اور مالیاتی خلاصہ'
-                : 'Gujjar Petrolium Kot Gujjran — Fuel & Ledger Management System'}
+                ? 'کھاتہ اور مالیاتی خلاصہ'
+                : 'Fuel & Ledger Management System'}
             </p>
           </div>
 

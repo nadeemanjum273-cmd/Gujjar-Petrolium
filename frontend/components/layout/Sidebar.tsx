@@ -205,11 +205,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      {/* Footer Info */}
-      <div className="p-3 border-t border-navy-850 text-[10px] text-slate-400 text-center font-mono">
-        Kot Gujjran • Gujjar Petrolium • PKR
-      </div>
     </aside>
   );
 }

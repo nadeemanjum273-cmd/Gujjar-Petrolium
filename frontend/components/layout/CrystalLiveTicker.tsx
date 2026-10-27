@@ -1,17 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Fuel,
-  Clock,
-  ShieldCheck,
   Zap,
   Droplets,
   Truck,
   Activity,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { BUSINESS_IDENTITY } from '@/lib/constants';
 
 interface TickerItem {
   id: string;
@@ -27,25 +24,6 @@ interface TickerItem {
 
 export function CrystalLiveTicker() {
   const { isUrdu } = useLanguage();
-  const [timeStr, setTimeStr] = useState<string>('');
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setTimeStr(
-        now.toLocaleTimeString(isUrdu ? 'ur-PK' : 'en-US', {
-          timeZone: 'Asia/Karachi',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: true,
-        })
-      );
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, [isUrdu]);
 
   const tickerItems: TickerItem[] = [
     {
@@ -102,28 +80,6 @@ export function CrystalLiveTicker() {
       iconBg: 'bg-yellow-500/15',
       status: '230V OK',
       statusColor: 'text-yellow-300 bg-yellow-500/20 border border-yellow-500/30',
-    },
-    {
-      id: 'manager',
-      icon: <ShieldCheck className="w-3.5 h-3.5 text-teal-400 crystal-dancing-icon" />,
-      title: isUrdu ? 'مجاز منیجر' : 'Duty Manager',
-      value: `${BUSINESS_IDENTITY.manager} • ${isUrdu ? 'کوٹ گجراں' : 'Kot Gujjran'}`,
-      labelColor: 'text-teal-400',
-      pillBorder: 'border-teal-500/30 hover:border-teal-400/60',
-      iconBg: 'bg-teal-500/15',
-      status: isUrdu ? 'آن لائن' : 'Online',
-      statusColor: 'text-teal-300 bg-teal-500/20 border border-teal-500/30',
-    },
-    {
-      id: 'clock',
-      icon: <Clock className="w-3.5 h-3.5 text-cyan-400 crystal-dancing-icon" />,
-      title: isUrdu ? 'کراچی وقت' : 'Karachi Time',
-      value: timeStr || '09:40 AM',
-      labelColor: 'text-cyan-400',
-      pillBorder: 'border-cyan-500/30 hover:border-cyan-400/60',
-      iconBg: 'bg-cyan-500/15',
-      status: 'PST',
-      statusColor: 'text-cyan-300 bg-cyan-500/20 border border-cyan-500/30',
     },
   ];
 
