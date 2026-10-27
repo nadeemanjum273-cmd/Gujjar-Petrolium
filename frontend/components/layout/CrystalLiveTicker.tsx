@@ -163,7 +163,7 @@ export function CrystalLiveTicker() {
   );
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-40 crystal-hd-bar overflow-hidden py-2 select-none">
+    <div className="fixed bottom-0 inset-x-0 z-40 crystal-hd-bar overflow-hidden py-1.5 sm:py-2 select-none">
       {/* HD Glass Glow Highlights */}
       <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 via-transparent to-cyan-500/10 pointer-events-none" />
 

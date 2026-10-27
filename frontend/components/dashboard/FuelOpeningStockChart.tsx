@@ -98,11 +98,11 @@ export function FuelOpeningStockChart() {
   const totalVolume = segments.reduce((acc, curr) => acc + curr.liters, 0);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm pop-out-card flex flex-col justify-between">
+    <div className="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-6 shadow-sm pop-out-card flex flex-col justify-between">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3 sm:pb-4">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
             {t('fuelOpeningStock')}
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
@@ -115,9 +115,9 @@ export function FuelOpeningStockChart() {
       </div>
 
       {/* Chart Section */}
-      <div className="flex flex-col sm:flex-row items-center justify-around py-5 gap-6">
+      <div className="flex flex-col sm:flex-row items-center justify-around py-4 sm:py-5 gap-4 sm:gap-6">
         {/* SVG Pie Chart */}
-        <div className="relative w-52 h-52 flex-shrink-0">
+        <div className="relative w-44 h-44 sm:w-52 sm:h-52 flex-shrink-0">
           <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-md select-none">
             {slices.map((slice) => {
               const isHovered = activeSegment === slice.index;

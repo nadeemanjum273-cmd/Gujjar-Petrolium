@@ -123,8 +123,8 @@ export default function DashboardPage() {
         </section>
 
         {/* 2. FINANCIAL LEDGER KPI METRICS */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="pop-out-card bg-white rounded-2xl p-5 border border-rose-200/80 shadow-sm flex items-center justify-between">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="pop-out-card bg-white rounded-2xl p-4 sm:p-5 border border-rose-200/80 shadow-sm flex items-center justify-between">
             <div className="space-y-1">
               <span className="text-xs font-semibold text-slate-500">{t('totalReceivables')}</span>
               <div className="text-2xl font-black text-rose-600 font-mono tracking-tight">
@@ -134,8 +134,8 @@ export default function DashboardPage() {
                 {isUrdu ? 'تمام کسٹمرز کے واجب الادا بقایا جات' : 'Total credit balance outstanding'}
               </p>
             </div>
-            <div className="p-3 rounded-2xl bg-rose-50 text-rose-600">
-              <Wallet className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-rose-50 text-rose-600 flex-shrink-0">
+              <Wallet className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
           </div>
 
