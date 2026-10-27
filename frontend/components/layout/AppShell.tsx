@@ -74,7 +74,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Fuel className="w-4 h-4" />
             </div>
             <span className="font-bold text-sm truncate">
-              {isUrdu ? BUSINESS_IDENTITY.nameUr : 'FuelFlow Lite'}
+              {isUrdu ? BUSINESS_IDENTITY.nameUr : BUSINESS_IDENTITY.name}
             </span>
           </div>
           <button

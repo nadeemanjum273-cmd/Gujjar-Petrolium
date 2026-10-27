@@ -21,7 +21,7 @@ import { StatCard } from '@/components/ui/StatCard';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { FuelFlowStatCards } from '@/components/dashboard/FuelFlowStatCards';
+import { MetricStatCards } from '@/components/dashboard/MetricStatCards';
 import { FuelOpeningStockChart } from '@/components/dashboard/FuelOpeningStockChart';
 import { TodayBillingTable } from '@/components/dashboard/TodayBillingTable';
 import { api } from '@/lib/api';
@@ -82,8 +82,8 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs lg:text-sm text-slate-500 mt-1">
               {isUrdu
-                ? 'گجر پیٹرولیم کوٹ گجراں — فیول فلو اور کھاتہ مینجمنٹ سسٹم'
-                : 'FuelFlow Lite • Gujjar Petrolium Kot Gujjran — Realtime Fuel & Ledger Summary'}
+                ? 'گجر پیٹرولیم کوٹ گجراں — کھاتہ اور مالیاتی خلاصہ'
+                : 'Gujjar Petrolium Kot Gujjran — Fuel & Ledger Management System'}
             </p>
           </div>
 
@@ -112,9 +112,9 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* 1. HERO COLOR-CODED STAT CARDS (Matching Reference Screenshot with 3D Pop Out) */}
+        {/* 1. HERO COLOR-CODED STAT CARDS (3D Pop Out) */}
         <section className="space-y-2">
-          <FuelFlowStatCards
+          <MetricStatCards
             totalFuels={3}
             totalSuppliers={10}
             totalInvoices={2}
@@ -194,7 +194,7 @@ export default function DashboardPage() {
 
           {/* Today's Billing Table (7 Columns) */}
           <div className="lg:col-span-7">
-            <TodayBillingTable />
+            <TodayBillingTable transactions={recentTxns} />
           </div>
         </section>
 

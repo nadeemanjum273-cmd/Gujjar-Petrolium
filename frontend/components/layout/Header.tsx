@@ -13,7 +13,6 @@ import {
   LogIn,
   Globe,
   ChevronDown,
-  Sparkles,
 } from 'lucide-react';
 import { BUSINESS_IDENTITY } from '@/lib/constants';
 import { getStoredUser, clearStoredAuth, UserProfile } from '@/lib/api';
@@ -31,7 +30,6 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
 
     const updateClock = () => {
       const now = new Date();
-      // Format similar to reference image: "Sun Feb 18 2024 16:18:20 GMT+0500 (Pakistan Standard Time)"
       const dateOptions: Intl.DateTimeFormatOptions = {
         weekday: 'short',
         month: 'short',
@@ -65,7 +63,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
 
   return (
     <header className="h-16 bg-white border-b border-slate-200/80 sticky top-0 z-30 px-4 md:px-6 flex items-center justify-between shadow-xs select-none">
-      {/* Mobile Toggle & Brand Icon */}
+      {/* Mobile Toggle & Brand Identity */}
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -76,28 +74,25 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Brand Logo & Name in Header */}
+        {/* Brand Logo & Name: Pure Gujjar Petrolium */}
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
             <Fuel className="w-4.5 h-4.5" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <span className="font-extrabold text-base text-slate-900 tracking-tight leading-tight">
-                {isUrdu ? BUSINESS_IDENTITY.nameUr : 'FuelFlow Lite • Gujjar'}
-              </span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-md bg-teal-100 text-teal-800 border border-teal-200">
-                PRO
+                {isUrdu ? BUSINESS_IDENTITY.nameUr : BUSINESS_IDENTITY.name}
               </span>
             </div>
-            <p className="text-[10px] text-slate-400 leading-none hidden sm:block">
-              {isUrdu ? BUSINESS_IDENTITY.subtitleUr : 'Kot Gujjran Fuel Automation System'}
+            <p className="text-[10px] text-slate-500 leading-none hidden sm:block mt-0.5">
+              {isUrdu ? BUSINESS_IDENTITY.subtitleUr : 'Kot Gujjran Fuel & Ledger Management System'}
             </p>
           </div>
         </Link>
       </div>
 
-      {/* Center Live Date & Time matching reference image */}
+      {/* Center Live Date & Time */}
       <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-50 border border-slate-200/60 text-xs text-slate-600 font-mono">
         <Clock className="w-3.5 h-3.5 text-teal-600 animate-pulse" />
         <span className="ltr-text font-medium">{currentTime || 'Loading Live Clock...'}</span>
@@ -105,7 +100,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
 
       {/* Right Controls: Language Selector, Quick Actions, Profile */}
       <div className="flex items-center gap-3">
-        {/* Language Selector Dropdown matching reference image */}
+        {/* Language Selector Dropdown */}
         <div className="relative">
           <button
             onClick={() => setLangDropdownOpen(!langDropdownOpen)}
@@ -147,7 +142,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           )}
         </div>
 
-        {/* Quick New Transaction Button with 3D Pop Out */}
+        {/* Quick New Transaction Button */}
         <Link
           href="/transactions/new"
           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white text-xs font-semibold rounded-xl shadow-sm pop-out-btn transition-all"
@@ -156,7 +151,7 @@ export function Header({ onMenuToggle }: { onMenuToggle: () => void }) {
           <span className="hidden sm:inline">{t('navNewTransaction')}</span>
         </Link>
 
-        {/* Manager User Avatar */}
+        {/* Manager Profile */}
         {user ? (
           <div className="flex items-center gap-2 pr-2 border-r border-slate-200">
             <div className="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-700 shadow-inner">

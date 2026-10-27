@@ -44,15 +44,15 @@ export function FuelOpeningStockChart() {
       code: 'DIESEL',
     },
     {
-      nameKey: 'cngOrOctane',
-      defaultName: 'High Octane / CNG',
+      nameKey: 'mobilOil',
+      defaultName: 'Mobil Oil / Lubricants',
       percentage: 23.0,
       liters: 5750,
-      capacity: 25000,
+      capacity: 10000,
       color: '#eab308', // Amber Gold
       hoverColor: '#ca8a04',
       glowColor: 'rgba(234, 179, 8, 0.4)',
-      code: 'OCTANE',
+      code: 'MOBIL',
     },
   ];
 

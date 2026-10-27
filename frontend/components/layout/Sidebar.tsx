@@ -13,7 +13,6 @@ import {
   BarChart3,
   UserCircle2,
   Palette,
-  DownloadCloud,
   ChevronRight,
   UserCheck,
   PlusCircle,
@@ -28,7 +27,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const { isUrdu, t } = useLanguage();
 
-  // Navigation structure closely matching reference screenshot and system needs
+  // Navigation structure with 3D pop-out styling and genuine Gujjar Petrolium options
   const primaryNavItems = [
     {
       label: t('navDashboard'),
@@ -38,31 +37,17 @@ export function Sidebar() {
       hasSub: false,
     },
     {
-      label: t('navSupplier'),
-      href: '/reports',
-      icon: Truck,
-      badge: '10',
-      hasSub: true,
-    },
-    {
-      label: t('navCategories'),
-      href: '/settings',
-      icon: Layers,
-      badge: '3',
-      hasSub: true,
-    },
-    {
       label: t('navCustomer'),
       href: '/customers',
       icon: Users,
-      badge: '16',
+      badge: null,
       hasSub: true,
     },
     {
       label: t('navFuels'),
       href: '/settings',
       icon: Fuel,
-      badge: null,
+      badge: '3',
       hasSub: true,
     },
     {
@@ -71,6 +56,13 @@ export function Sidebar() {
       icon: FileText,
       badge: null,
       hasSub: false,
+    },
+    {
+      label: t('navSupplier'),
+      href: '/reports',
+      icon: Truck,
+      badge: null,
+      hasSub: true,
     },
     {
       label: t('navReports'),
@@ -95,43 +87,26 @@ export function Sidebar() {
       badge: null,
     },
     {
-      label: t('navAboutAuthor'),
+      label: t('navSettings'),
       href: '/settings',
-      icon: UserCircle2,
+      icon: Settings,
       badge: null,
-    },
-    {
-      label: t('navWebAppearance'),
-      href: '/settings',
-      icon: Palette,
-      badge: null,
-    },
-    {
-      label: t('navProVersion'),
-      href: '/dashboard',
-      icon: DownloadCloud,
-      badge: 'v2.4',
     },
   ];
 
   return (
     <aside className="w-64 bg-navy-950 text-slate-100 flex flex-col border-l border-navy-850 h-screen sticky top-0 z-30 select-none pb-12">
-      {/* Brand Header */}
+      {/* Brand Header: 100% Gujjar Petrolium */}
       <div className="p-4 border-b border-navy-850 flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-emerald-400 text-navy-950 flex items-center justify-center flex-shrink-0 shadow-md">
           <Fuel className="w-6 h-6 stroke-[2.2]" />
         </div>
         <div className="min-w-0">
-          <div className="flex items-center gap-1.5">
-            <h1 className="text-sm font-black text-white truncate tracking-tight">
-              {isUrdu ? 'گجر پیٹرولیم' : 'FuelFlow Lite'}
-            </h1>
-            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-teal-500/20 text-teal-300 border border-teal-500/30">
-              MVP
-            </span>
-          </div>
+          <h1 className="text-sm font-black text-white truncate tracking-tight">
+            {isUrdu ? BUSINESS_IDENTITY.nameUr : BUSINESS_IDENTITY.name}
+          </h1>
           <p className="text-[10px] text-teal-400/90 truncate mt-0.5">
-            {isUrdu ? 'کوٹ گجراں، پنجاب' : 'Kot Gujjran Station'}
+            {isUrdu ? BUSINESS_IDENTITY.locationUr : 'Kot Gujjran, Punjab'}
           </p>
         </div>
       </div>
@@ -233,7 +208,7 @@ export function Sidebar() {
 
       {/* Footer Info */}
       <div className="p-3 border-t border-navy-850 text-[10px] text-slate-400 text-center font-mono">
-        Kot Gujjran • PKR Currency • v1.0
+        Kot Gujjran • Gujjar Petrolium • PKR
       </div>
     </aside>
   );

@@ -4,8 +4,8 @@ import { BUSINESS_IDENTITY } from '@/lib/constants';
 import { LanguageProvider } from '@/lib/LanguageContext';
 
 export const metadata: Metadata = {
-  title: `${BUSINESS_IDENTITY.nameUr} — FuelFlow Lite Ledger System`,
-  description: 'FuelFlow Lite • Gujjar Petrolium Kot Gujjran — Fuel & Ledger Management System',
+  title: `${BUSINESS_IDENTITY.nameUr} — ${BUSINESS_IDENTITY.name}`,
+  description: 'گجر پیٹرولیم کوٹ گجراں — کھاتہ، فیول اور وصولی مینجمنٹ سسٹم',
 };
 
 export default function RootLayout({

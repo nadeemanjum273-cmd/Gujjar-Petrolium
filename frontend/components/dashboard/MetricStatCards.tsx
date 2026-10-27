@@ -12,7 +12,7 @@ interface HeroStatProps {
   totalCustomers?: number;
 }
 
-export function FuelFlowStatCards({
+export function MetricStatCards({
   totalFuels = 3,
   totalSuppliers = 10,
   totalInvoices = 2,
